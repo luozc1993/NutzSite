@@ -1,0 +1,112 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 1000,
+	"data": [{
+		"key": "id",
+		"type": "hide-input",
+		"label": "ID",
+		"tips": "ID",
+		"value": "",
+		"col": 4,
+		"power":2,
+		"offset":0
+	},{
+		"key": "key",
+		"type": "text-input",
+		"label": "表单标识",
+		"tips": "请输入字段标识",
+		"value": "",
+		"isRequired":1,
+		"col": 4
+	},
+	{
+		"key": "type",
+		"type": "select",
+		"label": "表单类型",
+		"value": "一",
+		"options":[
+			{"id":"text-input","name":"文本框"},
+			{"id":"date","name":"年月日"},
+			{"id":"time","name":"时分秒"},
+			{"id":"datetime","name":"年月日时分秒"},
+			{"id":"year","name":"年"},
+			{"id":"month","name":"月"},
+			{"id":"select","name":"下拉"},
+			{"id":"textarea","name":"多行输入框"},
+			{"id":"text","name":"文本显示"},
+			{"id":"switch","name":"开关"},
+			{"id":"checkbox","name":"多选"},
+			{"id":"radio","name":"单选"},
+			{"id":"hide-input","name":"隐藏表单"}],
+		"col": 4
+	},
+	{
+		"key": "label",
+		"type": "text-input",
+		"label": "标签",
+		"tips": "请输入标签",
+		"value": "",
+		"col": 4
+	},
+	{
+		"key": "tips",
+		"type": "text-input",
+		"label": "提示文字",
+		"tips": "请输入标签",
+		"value": "请输入",
+		"col": 4
+	},
+	{
+		"key": "value",
+		"type": "text-input",
+		"label": "默认值",
+		"tips": "请输入默认值",
+		"value": "",
+		"col": 4
+	},
+	{
+		"key": "col",
+		"type": "text-input",
+		"label": "占比格数",
+		"tips": "一行分12格：默认4占4格",
+		"value": "",
+		"col": 4
+	},
+	{
+		"key": "offset",
+		"type": "text-input",
+		"label": "偏移量",
+		"tips": "一行分12格：默认偏移量0",
+		"value": "",
+		"col": 4
+	},
+	{
+		"key": "power",
+		"type": "radio",
+		"label": "显示类型",
+		"value": "编辑",
+		"options":[{"id":0,"name":"编辑"},{"id":1,"name":"查看"},{"id":2,"name":"隐藏"}],
+		"col": 4
+	},
+	{
+		"key": "isRequired",
+		"type": "switch",
+		"label": "是否必填",
+		"options":[{"id":1,"name":"是"},{"id":0,"name":"否"}],
+		"value": "1",
+		"col": 4,
+		"power":0,
+		"offset":0
+	},
+	{
+		"key": "options",
+		"type": "textarea",
+		"label": "显示类型",
+		"tips": "例如[{'id':0,'name':'编辑'},{'id':1,'name':'查看'}，{'id':2,'name':'隐藏'}]",
+		"value":"",
+		"col": 12
+	}
+
+]
+}
