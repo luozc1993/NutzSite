@@ -8,6 +8,7 @@
 		<div class="row">
 			<div class="col-sm-12 search-collapse">
 				<form id="formId">
+					<input type="hidden" th:value="${table_id}">
 					<div class="select-list">
 						<ul>
 
@@ -50,10 +51,10 @@
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
         var prefix = ctx + "dynamic/form";
-
+		var table_id = [[${table_id}]];
         $(function() {
             var options = {
-                url: prefix + "/list",
+                url: prefix + "/list/"+table_id,
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",

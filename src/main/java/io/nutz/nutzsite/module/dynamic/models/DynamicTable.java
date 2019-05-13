@@ -28,6 +28,13 @@ public class DynamicTable extends BaseModel implements Serializable {
     private String tableName;
 
     /**
+     * 表名称
+     */
+    @Column("name")
+    @Comment("名称")
+    private String name;
+
+    /**
      * 表说明
      */
     @Column("remarks")
@@ -42,7 +49,13 @@ public class DynamicTable extends BaseModel implements Serializable {
     @Comment("删除标记 ")
     private boolean delFlag;
 
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getId() {
         return id;

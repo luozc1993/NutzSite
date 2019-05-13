@@ -1,6 +1,8 @@
 package io.nutz.nutzsite.module.dynamic.controller;
 
+import io.nutz.nutzsite.module.dynamic.models.DynamicTable;
 import io.nutz.nutzsite.module.dynamic.services.DynamicFormService;
+import io.nutz.nutzsite.module.dynamic.services.DynamicTableService;
 import io.nutz.nutzsite.module.sys.services.DeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
@@ -26,12 +28,15 @@ public class DynamicFormController {
 
     @Inject
     DynamicFormService dynamicFormService;
+    @Inject
+    DynamicTableService dynamicTableService;
 
-    @At("")
+    @At("/report/?")
     @Ok("th:/dynamic/form/form.html")
     @RequiresPermissions("dynamic:form:view")
-    public void index(HttpServletRequest req) {
-
+    public void index(String table_id,HttpServletRequest req) {
+        DynamicTable dynamicTable = dynamicTableService.fetch(table_id);
+        req.setAttribute("table_id",table_id);
     }
 
     /**
@@ -45,11 +50,13 @@ public class DynamicFormController {
                        @Param("name") String name,
                        @Param("orderByColumn") String orderByColumn,
                        @Param("isAsc") String isAsc,
+                       @Param("table_id") String table_id,
                        HttpServletRequest req) {
         Cnd cnd = Cnd.NEW();
         if (!Strings.isBlank(name)){
             //cnd.and("name", "like", "%" + name +"%");
         }
+        cnd.and("table_id","=",table_id);
         return dynamicFormService.tableList(pageNum,pageSize,cnd,orderByColumn,isAsc,null);
     }
 

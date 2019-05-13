@@ -58,8 +58,8 @@ public class DynamicForm extends BaseModel implements Serializable {
     /**
      * 字段行占比
      */
-    @Column("字段行占比")
-    @Comment("字段类型")
+    @Column("col")
+    @Comment("字段行占比")
     private String col;
 
     /**
@@ -90,6 +90,21 @@ public class DynamicForm extends BaseModel implements Serializable {
     @Comment("选择值")
     private String options;
 
+    /**
+     * 动态表id
+     */
+    @Column("table_id")
+    @Comment("选择值")
+    private String tableId;
+
+
+    public String getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(String tableId) {
+        this.tableId = tableId;
+    }
 
     public String getId() {
         return id;
