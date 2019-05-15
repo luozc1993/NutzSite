@@ -31,6 +31,26 @@ public class DynamicFormController {
     @Inject
     DynamicTableService dynamicTableService;
 
+    /**
+     * 新增表格页面
+     */
+    @At("/add/?")
+    @Ok("th:/dynamic/form/add.html")
+    public void add(String table_id,HttpServletRequest req) {
+        req.setAttribute("table_id",table_id);
+    }
+
+    /**
+     * 修改字典
+     */
+    @At("/edit/?")
+    @Ok("th://dynamic/form/edit.html")
+    public void edit(String id, HttpServletRequest req) {
+        DynamicTable dynamicTable = dynamicTableService.fetch(id);
+        req.setAttribute("dynamicTable",dynamicTable);
+    }
+
+
     @At("/report/?")
     @Ok("th:/dynamic/form/form.html")
     @RequiresPermissions("dynamic:form:view")
@@ -43,14 +63,15 @@ public class DynamicFormController {
      * 查询动态表格列表
      */
     @RequiresPermissions("dynamic:table:list")
-    @At
+    @At("/list/?")
     @Ok("json")
-    public Object list(@Param("pageNum")int pageNum,
+    public Object list(@Param("table_id") String table_id,
+                        @Param("pageNum")int pageNum,
                        @Param("pageSize")int pageSize,
                        @Param("name") String name,
                        @Param("orderByColumn") String orderByColumn,
                        @Param("isAsc") String isAsc,
-                       @Param("table_id") String table_id,
+
                        HttpServletRequest req) {
         Cnd cnd = Cnd.NEW();
         if (!Strings.isBlank(name)){

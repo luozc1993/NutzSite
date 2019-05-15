@@ -1,0 +1,6 @@
+/*无标签*/
+.nolabel{margin-left: 0}
+.required {color:red;}
+.required:valid {color:#000;}
+.required input{border: 1px solid red}
+.required input:valid{border: 1px solid #e6e6e6}
