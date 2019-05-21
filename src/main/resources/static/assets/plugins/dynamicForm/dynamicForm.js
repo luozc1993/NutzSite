@@ -2,35 +2,35 @@
   项目JS主入口
   以依赖layui的layer和form模块为例
 **/    
-layui.define(['layer',"form",'jquery','laydate'], function(exports){
+layui.define(['layer', 'form','jquery','laydate'], function(exports){
 	$ = layui.$;
 	var form = layui.form;
 	var laydate = layui.laydate;
-	var dynamicFormBom = $("#dynamicForm");
+	var dynamicFormBom = $(".dynamicForm");
 	var dynamicForm = {
 		//动态创建表单
 		form: function(obj){
 			//表单需要插入的id
 			var id = obj.id;
 			//表单数据
-			var datas = obj.data;
+			var datas = obj.data?obj.data:[];
 			//确定按钮名称
-			var yesBtnName = obj.yesBtnName;
+			var yesBtnName = obj.yesBtnName?obj.yesBtnName:"提交";
 			//是否显示按钮
             var showBtn = obj.showBtn;
-			yesBtnName = yesBtnName?yesBtnName:"提交";
+            //是否为方框样式
 			var pane = obj.pane;
 			var paneAtr = "";
 			if(pane){
-                paneAtr = 'layui-dynamicForm-pane';
+                paneAtr = 'layui-form-pane';
             }
 			//添加容器
-			$(id).html('<div id="dynamicForm" class="layui-dynamicForm layui-row '+paneAtr+'" ></div>');
-            dynamicFormBom = $("#dynamicForm");
+			$(id).html(`<div id="dynamicForm" class="dynamicForm layui-form layui-row ${paneAtr}" ></div>`);
+            dynamicFormBom = $(id+" .dynamicForm");
             //标题
             var title = obj.title;
             if(title){
-                dynamicFormBom.append('<h1 style="text-align: center;padding:30px">'+title+'</h1>');
+                dynamicFormBom.append(`<h1 style="text-align: center;padding:30px">${title}</h1>`);
             }
 
             //循环生成表单
@@ -40,12 +40,12 @@ layui.define(['layer',"form",'jquery','laydate'], function(exports){
             //是否显示确定按钮
             if(showBtn){
                 //确定取消按钮
-                dynamicFormBom.append('<div class="layui-dynamicForm-item layui-row layui-col-xs12" style="    margin: 20px 0px;">'
-                                      +'      <div class="layui-input-block " style="    margin-left:0px;text-align: center;">'
-                                       +'         <button class="layui-btn " lay-submit="" lay-filter="yes">'+yesBtnName+'</button>'
-                                       +'         <button lay-submit="" class="layui-btn layui-btn-primary " lay-filter="cancel">取消</button>'
-                                       +'     </div>'
-                                       +'</div>');
+                dynamicFormBom.append(`<div class="layui-form-item layui-row layui-col-xs12" style="    margin: 20px 0px;">
+                                            <div class="layui-input-block " style="    margin-left:0px;text-align: center;">
+                                                <button class="layui-btn " lay-submit="" lay-filter="yes">${yesBtnName}</button>
+                                                <button lay-submit="" class="layui-btn layui-btn-primary " lay-filter="cancel">取消</button>
+                                            </div>
+                                        </div>`);
             }
 
 			//刷新渲染
@@ -71,12 +71,12 @@ layui.define(['layer',"form",'jquery','laydate'], function(exports){
 			});
 		},
         dataTime: function (nolabel, formHtml, data,type,label,change,value,key) {
-            var html = '<div class="layui-dynamicForm-item">'
-                        +label
-                        +'    <div class="layui-input-block '+nolabel+'">'
-                        +'      <input type="text" name="'+key+'" id="'+key+'" lay-verify="'+key+'" autocomplete="off" class="layui-input">'
-                        +'    </div>'
-                        +'</div>';
+            var html = `<div class="layui-form-item">
+                            ${label}
+                            <div class="layui-input-block ${nolabel}">
+                              <input type="text" name="${key}" id="${key}" lay-verify="${key}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>`;
             dynamicFormBom.append(formHtml.replace("formHtml", html));
             if (!value) {
                 value = new Date();
@@ -105,7 +105,7 @@ layui.define(['layer',"form",'jquery','laydate'], function(exports){
 			//标签样式
 			var nolabel = "";
 			if(label){
-                label = '<label class="layui-dynamicForm-label">'+label+'</label>';
+                label = '<label class="layui-form-label">'+label+'</label>';
             }else{
 			    //没标签取消左边的margin-left
                 nolabel = "nolabel"
@@ -132,21 +132,22 @@ layui.define(['layer',"form",'jquery','laydate'], function(exports){
             var click = obj.click;
             //是否必填
             var isRequired = data.isRequired;
+            console.log(isRequired)
             var verify = "";
             if(isRequired==1){
                 verify = "required";
             }
 
-            var formHtml = '<div class="layui-col-xs12 layui-col-sm6 layui-col-md'+col+' '+offset+'">formHtml</div>';
+            var formHtml = `<div class="layui-col-sm6 layui-col-md${col} ${offset}">formHtml</div>`;
 			switch (type){
 				case 'text-input'://文本输入框
-                    var html = '<div class="layui-dynamicForm-item '+verify+'">'
-                               +label
-                               +'     <div class="layui-input-block '+nolabel+'">'
-                               +'       <input type="text" name="'+key+'" id="'+key+'" value="'+value+'"  lay-verify="'+verify+'" autocomplete="off" placeholder="'+tips+'" required class="layui-input">'
-                               +'       <input type="hidden" name="'+key+'_hide" id="'+key+'_hide"  class="layui-input">'
-                               +'     </div>'
-                               +'  </div>';
+                    var html = `<div class="layui-form-item ${verify}">
+                                    ${label}
+                                    <div class="layui-input-block ${nolabel}">
+                                      <input type="text" name="${key}" id="${key}" value="${value}"  lay-verify="${verify}" autocomplete="off" placeholder="${tips}" required class="layui-input">
+                                      <input type="hidden" name="${key}_hide" id="${key}_hide"  class="layui-input">
+                                    </div>
+                                  </div>`;
                     dynamicFormBom.append(formHtml.replace("formHtml",html));
                     $("#"+key).change(function (o) {
                         if (change&&typeof change === "function"){
@@ -160,19 +161,19 @@ layui.define(['layer',"form",'jquery','laydate'], function(exports){
                     });
 					break;
                 case 'hide-input'://文本输入框
-                    var html = '<div class="layui-dynamicForm-item" style="display: none">'
-                               +label
-                               +'     <div class="layui-input-block '+nolabel+'">'
-                               +'         <input type="text" name="'+key+'" id="'+key+'" value="'+value+'"  lay-verify="'+verify+'" autocomplete="off" placeholder="'+tips+'" class="layui-input">'
-                               +'     </div>'
-                               +'</div>';
+                    var html = `<div class="layui-form-item" style="display: none">
+                                    ${label}
+                                    <div class="layui-input-block ${nolabel}">
+                                        <input type="text" name="${key}" id="${key}" value="${value}"  lay-verify="${verify}" autocomplete="off" placeholder="${tips}" class="layui-input">
+                                    </div>
+                                </div>`;
                     dynamicFormBom.append(formHtml.replace("formHtml",html));
                     break;
 				case 'text'://文本显示
-                    var html ='<div class="layui-dynamicForm-item">'
-                                    + label
-                               +'     <div class="layui-input-block '+nolabel+'" style="line-height: 36px;">'+value+'</div>'
-                               +'</div>';
+                    var html =`<div class="layui-form-item">
+                                    ${label}
+                                    <div class="layui-input-block ${nolabel}" style="line-height: 36px;">${value}</div>
+                                </div>`;
                     dynamicFormBom.append(formHtml.replace("formHtml",html));
 					break;
 				case 'select'://下拉
@@ -182,19 +183,19 @@ layui.define(['layer',"form",'jquery','laydate'], function(exports){
 					for (var i in options) {
 					    var option = options[i];
 						if(option.name===value){
-                            optionHtml +='<option  selected="" value="'+(option.id?option.id:option.name)+'">'+option.name+'</option>'
+                            optionHtml +=`<option  selected="" value="${option.id?option.id:option.name}">${option.name}</option>`
 						}else{
-                            optionHtml +='<option  value="'+(option.id?option.id:option.name)+'">'+option.name+'</option>'
+                            optionHtml +=`<option  value="${option.id?option.id:option.name}">${option.name}</option>`
 						}
 					}
-                    var html ='<div class="layui-dynamicForm-item">'
-                                    + label
-                               +'     <div class="layui-input-block '+nolabel+'">'
-                               +'       <select name="'+key+'" lay-filter="'+key+'">'
-                               +    optionHtml
-                               +'       </select>'
-                               +'     </div>'
-                               +'  </div>';
+                    var html =`<div class="layui-form-item">
+                                    ${label}
+                                    <div class="layui-input-block ${nolabel}">
+                                      <select name="${key}" lay-filter="${key}">
+                                       ${optionHtml}
+                                      </select>
+                                    </div>
+                                  </div>`;
                     dynamicFormBom.append(formHtml.replace("formHtml",html));
                     //监听表单点击事件
                     form.on('select('+key+')', function(o){
@@ -211,12 +212,12 @@ layui.define(['layer',"form",'jquery','laydate'], function(exports){
                     this.dataTime(nolabel, formHtml, data,type,label,change,value,key);
                     break;
                 case 'textarea':
-                    var html = '<div class="layui-dynamicForm-item layui-dynamicForm-text">'
-                                    + label
-                               +'     <div class="layui-input-block '+nolabel+'">'
-                               +'         <textarea name="'+key+'" id="'+key+'" placeholder="'+tips+'" lay-verify="'+verify+'" class="layui-textarea">'+value+'</textarea>'
-                               +'     </div>'
-                               +'</div>';
+                    var html = `<div class="layui-form-item layui-form-text">
+                                    ${label}
+                                    <div class="layui-input-block ${nolabel}">
+                                        <textarea name="${key}" id="${key}" placeholder="${tips}" lay-verify="${verify}" class="layui-textarea">${value}</textarea>
+                                    </div>
+                                </div>`;
 
                     dynamicFormBom.append(formHtml.replace("formHtml",html));
                     $("#"+key).change(function (o) {
@@ -236,17 +237,17 @@ layui.define(['layer',"form",'jquery','laydate'], function(exports){
                     var text = options[0].name+"|"+options[1].name;
                     var input = "";
                     if(options[0].name==value){
-                        input = '<input type="checkbox"  checked="" name="'+key+'" id="'+key+'" lay-text="${text}" lay-filter="'+key+'" value="'+value+'"  lay-skin="switch" title="${text}">';
+                        input = `<input type="checkbox"  checked="" name="${key}" id="${key}" lay-text="${text}" lay-filter="${key}" value="${value}"  lay-skin="switch" title="${text}">`;
                     }else{
-                        input = '<input type="checkbox"  name="'+key+'" id="'+key+'" lay-text="${text}" lay-filter="'+key+'" value="'+value+'"  lay-skin="switch" title="${text}">';
+                        input = `<input type="checkbox"  name="${key}" id="${key}" lay-text="${text}" lay-filter="${key}" value="${value}"  lay-skin="switch" title="${text}">`;
                     }
 
-                    var html = ' <div class="layui-dynamicForm-item" pane="">'
-                                    + label
-                               +'     <div class="layui-input-block">'
-                               +input
-                               +'     </div>'
-                               +' </div>';
+                    var html = ` <div class="layui-form-item" pane="">
+                                    ${label}
+                                    <div class="layui-input-block">
+                                      ${input}
+                                    </div>
+                                 </div>`;
                     dynamicFormBom.append(formHtml.replace("formHtml",html));
                     //监听表单点击事件
                     form.on('switch('+key+')', function(o){
@@ -257,29 +258,29 @@ layui.define(['layer',"form",'jquery','laydate'], function(exports){
                     break;
                 case 'checkbox':
                     var input = "";
-                    var values = value.split(",");
-                    for (var i = 0; i < options.length; i++) {
+                    let values = value.split(",");
+                    for (let i = 0; i < options.length; i++) {
                         var option = options[i];
                         var b = false;
-                        for (var j = 0; j < values.length; j++) {
+                        for (let j = 0; j < values.length; j++) {
                             if(option.name==values[j]){
                                 b = true;
                             }
                         }
                         if(b){
-                            input += '<input  type="checkbox" name="'+key+'['+(option.id?option.id:option.name)+']" lay-skin="primary" lay-filter="'+key+'" value="'+(option.id?option.id:option.name)+'" title="'+option.name+'" checked="">';
+                            input += `<input  type="checkbox" name="${key}[${option.id?option.id:option.name}]" lay-skin="primary" lay-filter="${key}" value="${option.id?option.id:option.name}" title="${option.name}" checked="">`;
                         }else{
-                            input += '<input type="checkbox" name="'+key+'['+(option.id?option.id:option.name)+']" lay-skin="primary" lay-filter="'+key+'" value="'+(option.id?option.id:option.name)+'" title="'+option.name+'">';
+                            input += `<input type="checkbox" name="${key}[${option.id?option.id:option.name}]" lay-skin="primary" lay-filter="${key}" value="${option.id?option.id:option.name}" title="${option.name}">`;
                         }
 
                     }
 
-                    var html = ' <div class="layui-dynamicForm-item " pane="">'
-                                    + label
-                               +'     <div class="layui-input-block '+nolabel+'">'
-                               +option.name
-                               +'     </div>'
-                               +'  </div>';
+                    var html = ` <div class="layui-form-item " pane="">
+                                    ${label}
+                                    <div class="layui-input-block ${nolabel}">
+                                      ${input}
+                                    </div>
+                                  </div>`;
                     dynamicFormBom.append(formHtml.replace("formHtml",html));
                     form.on('checkbox('+key+')', function(o){
                         if (change&&typeof change === "function"){
@@ -289,24 +290,22 @@ layui.define(['layer',"form",'jquery','laydate'], function(exports){
                     break;
                 case 'radio':
                     var input = "";
-
-                    for (var i = 0; i < options.length; i++) {
+                    for (let i = 0; i < options.length; i++) {
                         var option = options[i];
-
                         if(option.name==value){
-                           input += '<input type="radio" name="'+key+'" lay-skin="primary" lay-filter="'+key+'" value="'+(option.id?option.id:option.name)+'" title="'+option.name+'" checked="">';
+                            input += `<input type="radio" name="${key}" lay-skin="primary" lay-filter="${key}" value="${option.id?option.id:option.name}" title="${option.name}" checked="">`;
                         }else{
-                            input += '<input type="radio" name="'+key+'" lay-skin="primary" lay-filter="'+key+'" value="'+(option.id?option.id:option.name)+'" title="'+option.name+'">';
+                            input += `<input type="radio" name="${key}" lay-skin="primary" lay-filter="${key}" value="${option.id?option.id:option.name}" title="${option.name}">`;
                         }
 
                     }
 
-                    var html = ' <div class="layui-dynamicForm-item " pane="">'
-                                    + label
-                               +'     <div class="layui-input-block '+nolabel+'">'
-                               +    input
-                               +'     </div>'
-                               +'  </div>';
+                    var html = ` <div class="layui-form-item " pane="">
+                                    ${label}
+                                    <div class="layui-input-block ${nolabel}">
+                                      ${input}
+                                    </div>
+                                  </div>`;
                     dynamicFormBom.append(formHtml.replace("formHtml",html));
                     form.on('radio('+key+')', function(o){
                         if (change&&typeof change === "function"){

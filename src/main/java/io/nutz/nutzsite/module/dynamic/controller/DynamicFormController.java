@@ -1,5 +1,7 @@
 package io.nutz.nutzsite.module.dynamic.controller;
 
+import io.nutz.nutzsite.common.base.Result;
+import io.nutz.nutzsite.module.dynamic.models.DynamicForm;
 import io.nutz.nutzsite.module.dynamic.models.DynamicTable;
 import io.nutz.nutzsite.module.dynamic.services.DynamicFormService;
 import io.nutz.nutzsite.module.dynamic.services.DynamicTableService;
@@ -81,5 +83,18 @@ public class DynamicFormController {
         return dynamicFormService.tableList(pageNum,pageSize,cnd,orderByColumn,isAsc,null);
     }
 
+    /**
+     * 添加
+     */
+    @RequiresPermissions("dynamic:table:add")
+    @At("/add")
+    @Ok("json")
+    public Object add(DynamicForm dynamicForm,HttpServletRequest req) {
+        DynamicForm data = dynamicFormService.insert(dynamicForm);
+        if(data!=null){
+            return Result.success("system.success", data);
+        }
+        return Result.error("system.error");
+    }
 
 }

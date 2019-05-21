@@ -1,143 +1,211 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org"
-	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
 <link th:href="@{/assets/plugins/jquery-layout/jquery.layout-latest.css}" rel="stylesheet"/>
 <link th:href="@{/assets/plugins/layui/css/layui.css}" rel="stylesheet"/>
+<link th:href="@{/assets/plugins/dynamicForm/dynamicForm.css}" rel="stylesheet"/>
 <body class="gray-bg">
 
 <div class="container-div ui-layout-center">
 	<div class="layui-row">
 		<div class="layui-col-xs12 layui-col-sm12 layui-col-md12 search-collapse">
-			<div id="form" style="padding: 10px 15px"></div>
+			<form id="preview" style="padding: 10px 15px"></form>
+		</div>
+		<div class="layui-col-xs12 layui-col-sm12 layui-col-md12 search-collapse">
+			<form id="form" style="padding: 10px 15px"></form>
 		</div>
 	</div>
 </div>
 <script th:src="@{/assets/plugins/layui/layui.js}"></script>
-<script type="text/javascript">
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+<div th:include="include::footer"></div>
+<script th:inline="javascript">
+	var datas = [
+		{
+			"key": "id",
+			"type": "hide-input",
+			"label": "ID",
+			"tips": "ID",
+			"value": "",
+			"col": 4,
+			"power":2,
+			"offset":0
+		},
+		{
+			"key": "key",
+			"type": "text-input",
+			"label": "表单标识",
+			"tips": "请输入字段标识 例filed",
+			"value": "",
+			"isRequired":1,
+			"col": 4
+		},
+		{
+			"key": "type",
+			"type": "select",
+			"label": "表单类型",
+			"value": "一",
+			"options":[
+				{"id":"text-input","name":"文本框"},
+				{"id":"date","name":"年月日"},
+				{"id":"time","name":"时分秒"},
+				{"id":"datetime","name":"年月日时分秒"},
+				{"id":"year","name":"年"},
+				{"id":"month","name":"月"},
+				{"id":"select","name":"下拉"},
+				{"id":"textarea","name":"多行输入框"},
+				{"id":"text","name":"文本显示"},
+				{"id":"switch","name":"开关"},
+				{"id":"checkbox","name":"多选"},
+				{"id":"radio","name":"单选"},
+				{"id":"hide-input","name":"隐藏表单"}],
+			"col": 4
+		},
+		{
+			"key": "label",
+			"type": "text-input",
+			"label": "标签",
+			"tips": "请输入标签",
+			"value": "标签",
+			"col": 4
+		},
+		{
+			"key": "tips",
+			"type": "text-input",
+			"label": "提示文字",
+			"tips": "请输入标签",
+			"value": "提示文字",
+			"col": 4
+		},
+		{
+			"key": "value",
+			"type": "text-input",
+			"label": "默认值",
+			"tips": "",
+			"value": "",
+			"col": 4
+		},
+		{
+			"key": "col",
+			"type": "text-input",
+			"label": "占比格数",
+			"tips": "一行分12格：默认4占4格",
+			"value": "",
+			"col": 4
+		},
+		{
+			"key": "offset",
+			"type": "text-input",
+			"label": "偏移量",
+			"tips": "一行分12格：默认偏移量0",
+			"value": "",
+			"col": 4
+		},
+		{
+			"key": "power",
+			"type": "radio",
+			"label": "显示类型",
+			"value": "编辑",
+			"options":[{"id":0,"name":"编辑"},{"id":1,"name":"查看"},{"id":2,"name":"隐藏"}],
+			"col": 4
+		},
+		{
+			"key": "isRequired",
+			"type": "switch",
+			"label": "是否必填",
+			"options":[{"id":1,"name":"是"},{"id":0,"name":"否"}],
+			"value": "1",
+			"col": 4,
+			"power":0,
+			"offset":0
+		},
+		{
+			"key": "options",
+			"type": "textarea",
+			"label": "显示类型",
+			"tips": "例如[{'id':0,'name':'编辑'},{'id':1,'name':'查看'}，{'id':2,'name':'隐藏'}]",
+			"value":"",
+			"col": 12
+		}
+
+	];
+	var previewData = [{
+		"key": "key",
+		"type": "text-input",
+		"label": "标签",
+		"tips": "提示符",
+		"value": "",
+		"isRequired":0,
+		"col": 4
+	}];
+	//表单id
+	var tableId = [[${table_id}]];
 	layui.config({
-		base: '/assets/plugins/layui/lay/modules/'
+		base: '/assets/plugins/'
 	}).extend({
-		dynamicForm: 'dynamicForm'
-	}).use(['layer','jquery','dynamicForm'],function(){
+		dynamicForm: 'dynamicForm/dynamicForm'
+	}).use(['layer','form','dynamicForm'],function(){
 		var dynamicForm = layui.dynamicForm;
 		dynamicForm.form({
 			id:"#form",
 			title:"",
-			showBtn:true,
+			showBtn:false,
 			yesBtnName:"提交",
 			pane:true,
-			data:[
-				{
-					"key": "id",
-					"type": "hide-input",
-					"label": "ID",
-					"tips": "ID",
-					"value": "",
-					"col": 4,
-					"power":2,
-					"offset":0
-				},
-				{
-					"key": "key",
-					"type": "text-input",
-					"label": "表单标识",
-					"tips": "请输入字段标识",
-					"value": "",
-					"isRequired":1,
-					"col": 4
-				},
-				{
-					"key": "type",
-					"type": "select",
-					"label": "表单类型",
-					"value": "一",
-					"options":[
-						{"id":"text-input","name":"文本框"},
-						{"id":"date","name":"年月日"},
-						{"id":"time","name":"时分秒"},
-						{"id":"datetime","name":"年月日时分秒"},
-						{"id":"year","name":"年"},
-						{"id":"month","name":"月"},
-						{"id":"select","name":"下拉"},
-						{"id":"textarea","name":"多行输入框"},
-						{"id":"text","name":"文本显示"},
-						{"id":"switch","name":"开关"},
-						{"id":"checkbox","name":"多选"},
-						{"id":"radio","name":"单选"},
-						{"id":"hide-input","name":"隐藏表单"}],
-					"col": 4
-				},
-				{
-					"key": "label",
-					"type": "text-input",
-					"label": "标签",
-					"tips": "请输入标签",
-					"value": "",
-					"col": 4
-				},
-				{
-					"key": "tips",
-					"type": "text-input",
-					"label": "提示文字",
-					"tips": "请输入标签",
-					"value": "请输入",
-					"col": 4
-				},
-				{
-					"key": "value",
-					"type": "text-input",
-					"label": "默认值",
-					"tips": "请输入默认值",
-					"value": "",
-					"col": 4
-				},
-				{
-					"key": "col",
-					"type": "text-input",
-					"label": "占比格数",
-					"tips": "一行分12格：默认4占4格",
-					"value": "",
-					"col": 4
-				},
-				{
-					"key": "offset",
-					"type": "text-input",
-					"label": "偏移量",
-					"tips": "一行分12格：默认偏移量0",
-					"value": "",
-					"col": 4
-				},
-				{
-					"key": "power",
-					"type": "radio",
-					"label": "显示类型",
-					"value": "编辑",
-					"options":[{"id":0,"name":"编辑"},{"id":1,"name":"查看"},{"id":2,"name":"隐藏"}],
-					"col": 4
-				},
-				{
-					"key": "isRequired",
-					"type": "switch",
-					"label": "是否必填",
-					"options":[{"id":1,"name":"是"},{"id":0,"name":"否"}],
-					"value": "1",
-					"col": 4,
-					"power":0,
-					"offset":0
-				},
-				{
-					"key": "options",
-					"type": "textarea",
-					"label": "显示类型",
-					"tips": "例如[{'id':0,'name':'编辑'},{'id':1,'name':'查看'}，{'id':2,'name':'隐藏'}]",
-					"value":"",
-					"col": 12
-				}
+			data:datas,
+			success:function(obj){
+				console.log(obj)
+			},
+			yes:function(obj){
+				console.log(obj)
+			},
+			cancel:function(obj){
+				console.log(obj)
+			},
+			change:function(o,data,value){
+				console.log(o,data,value)
+				var key = data.key;
+				console.log(key)
+				previewData[0][key] = value;
 
-			]
-			,
+				console.log(previewData)
+				dynamicForm.form({
+					id:"#preview",
+					title:"",
+					showBtn:false,
+					yesBtnName:"提交",
+					pane:true,
+					data:previewData,
+					success:function(obj){
+						console.log(obj)
+					},
+					yes:function(obj){
+						console.log(obj)
+					},
+					cancel:function(obj){
+						console.log(obj)
+					},
+					change:function(o,data,value){
+						console.log(o,data,value)
+					},
+					click:function(o,data,value){
+					}
+				});
+
+			},
+			click:function(o,data,value){
+			}
+		});
+
+		dynamicForm.form({
+			id:"#preview",
+			title:"",
+			showBtn:false,
+			yesBtnName:"提交",
+			pane:true,
+			data:previewData,
 			success:function(obj){
 				console.log(obj)
 			},
@@ -151,11 +219,37 @@
 				console.log(o,data,value)
 			},
 			click:function(o,data,value){
-				console.log(o,data)
-				console.log(value)
 			}
 		});
-	})
+	});
+	var prefix = ctx + "dynamic/form";
+
+	var rules = {};
+	for (var i = 0; i < datas.length; i++) {
+		var data = datas[i];
+		var key = data.key;
+		var isRequired = data.isRequired;
+		var required = false;
+		if(isRequired&&isRequired==1){
+			required = true;
+		}
+		rules[key] = {required:required}
+	}
+
+
+
+	$("#form").validate({
+		onkeyup: false,
+		rules:rules
+
+	});
+	function submitHandler() {
+		if ($.validate.form()) {
+			var formData = $('#form').serialize();
+			formData += "&tableId="+tableId;
+			$.operate.save(prefix + "/add", formData);
+		}
+	}
 </script>
 </body>
 </html>
