@@ -7,12 +7,15 @@ NutzSite基于Nutz的开源企业级开发框架
 ![项目截图](1556263635342.jpg)
 ![生成代码](1556263681393.jpg)
 ## 目前支持
+* Nutz
+* Nutzboot
 * Druid
 * Shiro
 * Thymeleaf
 * Quartz 定时任务
 * SLog日志记录
 * 支付宝
+* 微信公众平台
 * 阿里云消息推送
 * 阿里云短信
 * 高德地图
@@ -21,7 +24,6 @@ NutzSite基于Nutz的开源企业级开发框架
 * Excel 导出数据
 ## 给自己挖坑 后期支持待完善功能
 * 审批流
-* 微信公众平台
 * CMS
 
 本压缩包是一个maven工程, eclipse/idea均可按maven项目导入
