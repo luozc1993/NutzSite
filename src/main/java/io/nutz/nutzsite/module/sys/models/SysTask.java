@@ -16,7 +16,7 @@ import java.util.Date;
  * @date 2019-04-23
  */
 @Table("sys_task")
-public class Task extends BaseModel implements Serializable {
+public class SysTask extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Name

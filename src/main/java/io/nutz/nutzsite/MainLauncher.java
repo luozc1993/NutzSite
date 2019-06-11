@@ -5,12 +5,17 @@ import io.nutz.nutzsite.common.base.Globals;
 import io.nutz.nutzsite.common.utils.ShiroUtils;
 import io.nutz.nutzsite.common.utils.TreeUtils;
 import io.nutz.nutzsite.module.sys.models.Menu;
-import io.nutz.nutzsite.module.sys.models.Task;
+import io.nutz.nutzsite.module.sys.models.SysTask;
 import io.nutz.nutzsite.module.sys.models.User;
 import io.nutz.nutzsite.module.sys.services.ConfigService;
 import io.nutz.nutzsite.module.sys.services.MenuService;
-import io.nutz.nutzsite.module.sys.services.TaskService;
+import io.nutz.nutzsite.module.sys.services.SysTaskService;
 import io.nutz.nutzsite.module.sys.services.UserService;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
+import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.nutz.boot.NbApp;
 import org.nutz.conf.NutConf;
 import org.nutz.dao.Cnd;
@@ -22,16 +27,21 @@ import org.nutz.integration.quartz.QuartzJob;
 import org.nutz.integration.quartz.QuartzManager;
 import org.nutz.ioc.Ioc;
 import org.nutz.ioc.impl.PropertiesProxy;
-import org.nutz.ioc.loader.annotation.*;
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
 import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.mvc.NutConfig;
-import org.nutz.mvc.annotation.*;
+import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.IocBy;
+import org.nutz.mvc.annotation.Localization;
+import org.nutz.mvc.annotation.Ok;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author haiming
@@ -55,6 +65,12 @@ public class MainLauncher {
     private UserService userService;
     @Inject
     private MenuService menuService;
+
+    @Inject RepositoryService repositoryService;
+
+    @Inject RuntimeService runtimeService;
+    @Inject TaskService taskService;
+
 
     @At({"/", "/index"})
     @Ok("re")
@@ -109,6 +125,13 @@ public class MainLauncher {
         });
         // 创建数据库
         Daos.createTablesInPackage(dao, "io.nutz.nutzsite", false);
+
+
+
+
+
+
+
     }
 
     public void depose() {
@@ -125,10 +148,10 @@ public class MainLauncher {
      */
     private void initSysTask(Ioc ioc) {
         QuartzManager quartzManager = ioc.get(QuartzManager.class);
-        TaskService taskService = ioc.get(TaskService.class);
+        SysTaskService sysTaskService = ioc.get(SysTaskService.class);
         quartzManager.clear();
-        List<Task> taskList = taskService.query( Cnd.where("status", "=", true));
-        for (Task sysTask : taskList) {
+        List<SysTask> taskList = sysTaskService.query( Cnd.where("status", "=", true));
+        for (SysTask sysTask : taskList) {
             try {
                 QuartzJob qj = new QuartzJob();
                 qj.setJobName(sysTask.getId());

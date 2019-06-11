@@ -1,12 +1,12 @@
 package io.nutz.nutzsite.module.sys.services;
 
 import io.nutz.nutzsite.common.base.Service;
+import io.nutz.nutzsite.module.sys.models.SysTask;
 import org.nutz.dao.Dao;
 import org.nutz.integration.quartz.QuartzJob;
 import org.nutz.integration.quartz.QuartzManager;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import io.nutz.nutzsite.module.sys.models.Task;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.quartz.JobKey;
@@ -18,10 +18,10 @@ import org.quartz.JobKey;
  * @date 2019-04-23
  */
 @IocBean(args = {"refer:dao"})
-public class TaskService extends Service<Task> {
+public class SysTaskService extends Service<SysTask> {
     private static final Log log = Logs.get();
 
-    public TaskService(Dao dao) {
+    public SysTaskService(Dao dao) {
         super(dao);
     }
 
@@ -33,7 +33,7 @@ public class TaskService extends Service<Task> {
      * 添加定时任务执行
      * @param sysTask
      */
-    public void addQuartz(Task sysTask){
+    public void addQuartz(SysTask sysTask){
         try {
             boolean isExist = quartzManager.exist(new JobKey(sysTask.getId(), sysTask.getId()));
             if (isExist) {

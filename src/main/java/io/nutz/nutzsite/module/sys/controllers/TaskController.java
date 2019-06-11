@@ -1,10 +1,10 @@
 package io.nutz.nutzsite.module.sys.controllers;
 
+import io.nutz.nutzsite.common.base.Result;
 import io.nutz.nutzsite.common.utils.ShiroUtils;
+import io.nutz.nutzsite.module.sys.models.SysTask;
+import io.nutz.nutzsite.module.sys.services.SysTaskService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import io.nutz.nutzsite.module.sys.models.Task;
-import io.nutz.nutzsite.module.sys.services.TaskService;
-import io.nutz.nutzsite.common.base.Result;;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -21,6 +21,8 @@ import org.nutz.plugins.slog.annotation.Slog;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
+;
+
 /**
  * 定时任务 信息操作处理
  *
@@ -33,7 +35,7 @@ public class TaskController {
     private static final Log log = Logs.get();
 
     @Inject
-    private TaskService taskService;
+    private SysTaskService taskService;
 
 
     @RequiresPermissions("sys:task:view")
@@ -77,9 +79,9 @@ public class TaskController {
     @POST
     @Ok("json")
     @Slog(tag="定时任务", after="新增保存定时任务id=${args[0].id}")
-    public Object addDo(@Param("..") Task task, HttpServletRequest req) {
+    public Object addDo(@Param("..") SysTask task, HttpServletRequest req) {
         try {
-            Task sysTask =taskService.insert(task);
+            SysTask sysTask =taskService.insert(task);
             taskService.addQuartz(sysTask);
             return Result.success("system.success");
         } catch (Exception e) {
@@ -93,7 +95,7 @@ public class TaskController {
     @At("/edit/?")
     @Ok("th://sys/task/edit.html")
     public void edit(String id, HttpServletRequest req) {
-        Task task = taskService.fetch(id);
+        SysTask task = taskService.fetch(id);
         req.setAttribute("task", task);
     }
 
@@ -105,7 +107,7 @@ public class TaskController {
     @POST
     @Ok("json")
     @Slog(tag="定时任务", after="修改保存定时任务")
-    public Object editDo(@Param("..") Task sysTask, HttpServletRequest req) {
+    public Object editDo(@Param("..") SysTask sysTask, HttpServletRequest req) {
         try {
             try {
                 taskService.addQuartz(sysTask);
